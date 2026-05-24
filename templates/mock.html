@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FloodGuard Pakistan - Presentation Mock</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav class="topnav">
+        <div class="nav-brand">
+            <i class="fas fa-shield-halved"></i>
+            <span class="brand-text">FloodGuard<span class="brand-accent">PK</span> (Demo Mode)</span>
+        </div>
+        <button class="btn btn-primary" onclick="triggerEmergency()"><i class="fas fa-siren-on"></i> Trigger Scenario</button>
+    </nav>
+
+    <div class="app-container">
+        <div class="map-area">
+            <div id="map"></div>
+            
+            <div class="map-overlay-left">
+                <div class="glass-panel" id="riskPanel">
+                    <h3><i class="fas fa-triangle-exclamation"></i> Live Risk Assessment</h3>
+                    <div class="risk-main">
+                        <div class="risk-badge" id="mockBadge" style="border-color:var(--safe); color:var(--safe)">NORMAL</div>
+                        <div class="risk-stats">
+                            <div class="stat-row"><span>Flood Risk:</span> <b id="mockProb">12.4%</b></div>
+                            <div class="stat-row"><span>Confidence:</span> <b style="color:var(--accent)">92%</b></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel danger-pulse hidden" id="evacPanel">
+                    <h3><i class="fas fa-person-running"></i> Evacuation Protocol</h3>
+                    <p class="evac-warning">CRITICAL ZONE DETECTED</p>
+                    <div class="evac-target">Routing to Safe Zone (Islamabad Sports Complex)...</div>
+                    <div class="evac-actions">
+                        <a href="#" class="btn btn-primary"><i class="fas fa-route"></i> Route</a>
+                        <button class="btn btn-secondary" onclick="alert('Simulated Mock Email Sent!')"><i class="fas fa-envelope"></i> Send Alert</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        let map = L.map('map', {center: [33.6844, 73.0479], zoom: 11});
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}').addTo(map);
+        let circle;
+        
+        function triggerEmergency() {
+            document.getElementById('mockBadge').textContent = 'CRITICAL';
+            document.getElementById('mockBadge').style.borderColor = 'var(--critical)';
+            document.getElementById('mockBadge').style.color = 'var(--critical)';
+            document.getElementById('mockProb').textContent = '87.9%';
+            document.getElementById('evacPanel').classList.remove('hidden');
+            
+            if(circle) map.removeLayer(circle);
+            circle = L.circle([33.6844, 73.0479], {
+                color: 'red', fillColor: '#f03', fillOpacity: 0.3, radius: 20000
+            }).addTo(map);
+        }
+    </script>
+</body>
+</html>

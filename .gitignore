@@ -1,0 +1,12 @@
+node_modules/
+venv/
+env/
+__pycache__/
+*.pkl
+.env
+.gemini/
+dist/
+build/
+.DS_Store
+data/
+outputs/

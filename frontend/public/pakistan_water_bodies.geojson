@@ -1,0 +1,95 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {"name": "Indus River", "type": "river", "inflow": 250000, "outflow": 240000, "capacity": 600000},
+      "geometry": {"type": "LineString", "coordinates": [[74.5, 35.5], [73.0, 34.2], [71.5, 33.0], [70.5, 31.0], [70.0, 29.0], [68.5, 27.5], [68.0, 25.0], [67.5, 24.0]]}
+    },
+    {
+      "type": "Feature",
+      "properties": {"name": "Jhelum River", "type": "river", "inflow": 80000, "outflow": 75000, "capacity": 200000},
+      "geometry": {"type": "LineString", "coordinates": [[73.5, 34.0], [73.6, 33.1], [73.0, 32.5], [72.1, 31.2]]}
+    },
+    {
+      "type": "Feature",
+      "properties": {"name": "Chenab River", "type": "river", "inflow": 60000, "outflow": 58000, "capacity": 250000},
+      "geometry": {"type": "LineString", "coordinates": [[75.0, 33.0], [74.0, 32.5], [73.0, 32.0], [72.1, 31.2], [71.0, 29.3]]}
+    },
+    {
+      "type": "Feature",
+      "properties": {"name": "Ravi River", "type": "river", "inflow": 40000, "outflow": 38000, "capacity": 150000},
+      "geometry": {"type": "LineString", "coordinates": [[75.0, 32.0], [74.3, 31.5], [72.5, 30.8], [71.8, 30.6]]}
+    },
+    {
+      "type": "Feature",
+      "properties": {"name": "Sutlej River", "type": "river", "inflow": 35000, "outflow": 33000, "capacity": 180000},
+      "geometry": {"type": "LineString", "coordinates": [[74.5, 31.1], [73.5, 30.2], [72.0, 29.8], [71.0, 29.3]]}
+    },
+    {
+      "type": "Feature",
+      "properties": {"name": "Kabul River", "type": "river", "inflow": 48700, "outflow": 48000, "capacity": 120000},
+      "geometry": {"type": "LineString", "coordinates": [[70.5, 34.1], [71.5, 34.0], [72.2, 33.9]]}
+    },
+    {
+      "type": "Feature",
+      "properties": {"name": "Tarbela Dam", "type": "dam", "inflow": 82700, "outflow": 70000, "capacity": 150000},
+      "geometry": {"type": "Point", "coordinates": [72.82, 34.08]}
+    },
+    {
+      "type": "Feature",
+      "properties": {"name": "Mangla Dam", "type": "dam", "inflow": 42654, "outflow": 38000, "capacity": 100000},
+      "geometry": {"type": "Point", "coordinates": [73.65, 33.14]}
+    },
+    {
+      "type": "Feature",
+      "properties": {"name": "Warsak Dam", "type": "dam", "inflow": 21000, "outflow": 20000, "capacity": 50000},
+      "geometry": {"type": "Point", "coordinates": [71.39, 34.16]}
+    },
+    {
+      "type": "Feature",
+      "properties": {"name": "Sukkur Barrage", "type": "barrage", "inflow": 54350, "outflow": 17850, "capacity": 1500000},
+      "geometry": {"type": "Point", "coordinates": [68.86, 27.68]}
+    },
+    {
+      "type": "Feature",
+      "properties": {"name": "Kotri Barrage", "type": "barrage", "inflow": 11255, "outflow": 0, "capacity": 875000},
+      "geometry": {"type": "Point", "coordinates": [68.32, 25.36]}
+    },
+    {
+      "type": "Feature",
+      "properties": {"name": "Guddu Barrage", "type": "barrage", "inflow": 62904, "outflow": 59493, "capacity": 1200000},
+      "geometry": {"type": "Point", "coordinates": [69.71, 28.42]}
+    },
+    {
+      "type": "Feature",
+      "properties": {"name": "Taunsa Barrage", "type": "barrage", "inflow": 99660, "outflow": 78138, "capacity": 750000},
+      "geometry": {"type": "Point", "coordinates": [70.86, 30.52]}
+    },
+    {
+      "type": "Feature",
+      "properties": {"name": "Chashma Barrage", "type": "barrage", "inflow": 114552, "outflow": 105000, "capacity": 950000},
+      "geometry": {"type": "Point", "coordinates": [71.36, 32.42]}
+    },
+    {
+      "type": "Feature",
+      "properties": {"name": "Kalabagh Barrage", "type": "barrage", "inflow": 136903, "outflow": 129903, "capacity": 900000},
+      "geometry": {"type": "Point", "coordinates": [71.53, 32.84]}
+    },
+    {
+      "type": "Feature",
+      "properties": {"name": "Marala Barrage", "type": "barrage", "inflow": 23566, "outflow": 7480, "capacity": 1100000},
+      "geometry": {"type": "Point", "coordinates": [74.46, 32.67]}
+    },
+    {
+      "type": "Feature",
+      "properties": {"name": "Panjnad Barrage", "type": "barrage", "inflow": 11533, "outflow": 0, "capacity": 700000},
+      "geometry": {"type": "Point", "coordinates": [71.02, 29.35]}
+    },
+    {
+      "type": "Feature",
+      "properties": {"name": "Nowshera Station", "type": "barrage", "inflow": 48700, "outflow": 48700, "capacity": 200000},
+      "geometry": {"type": "Point", "coordinates": [71.98, 34.01]}
+    }
+  ]
+}

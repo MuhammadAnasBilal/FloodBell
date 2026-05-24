@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FloodGuard Pakistan V3 (Ventusky Style)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="/static/css/style.css">
+    
+    <!-- Firebase Auth SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+</head>
+<body>
+
+    <!-- Auth Modal overlay -->
+    <div id="authModal" class="modal-overlay active">
+        <div class="auth-card">
+            <h2><i class="fas fa-shield-halved" style="color: #3b82f6;"></i> FloodGuard Auth</h2>
+            <p style="color: #94a3b8; margin-bottom: 20px; font-size: 14px;">Please sign in to access live analytics.</p>
+            <button id="btnGoogleSignIn" class="google-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="G" width="18">
+                Sign in with Google
+            </button>
+            <div style="margin-top: 15px; font-size: 12px; color: #64748b;">Firebase Integration Active</div>
+        </div>
+    </div>
+
+    <!-- Top Navigation -->
+    <nav class="topnav hidden" id="mainNav">
+        <div class="nav-brand">
+            <i class="fas fa-shield-halved"></i>
+            <span class="brand-text">FloodGuard<span class="brand-accent">PK</span> V3</span>
+        </div>
+        
+        <!-- Local Gazetteer Search -->
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" placeholder="Search Pakistan (e.g. Nala Lai)..." autocomplete="off">
+            <div id="searchResults" class="search-results hidden"></div>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-tab="dashboard" onclick="switchTab('dashboard')"><i class="fas fa-map"></i> Live Map</button>
+            <button class="nav-tab" data-tab="intelligence" onclick="switchTab('intelligence')"><i class="fas fa-database"></i> Data Intelligence</button>
+            <div class="user-profile" id="userProfile">
+                <img src="" alt="User" id="userAvatar" class="hidden">
+                <span id="userName">User</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="app-container hidden" id="appContent">
+        <!-- Dashboard Tab -->
+        <div class="tab-content active" id="tab-dashboard">
+            <div class="dashboard-layout">
+                
+                <!-- Ventusky-style Map Area -->
+                <main class="map-area">
+                    <div id="map"></div>
+
+                    <!-- Left Overlay Panels -->
+                    <div class="map-overlay-left">
+                        
+                        <!-- Risk Panel (Scientific View) -->
+                        <div class="glass-panel" id="riskPanel">
+                            <h3><i class="fas fa-triangle-exclamation"></i> Live Risk Assessment</h3>
+                            <div class="risk-main">
+                                <div class="risk-badge" id="riskBadge">ANALYZING</div>
+                                <div class="risk-stats">
+                                    <div class="stat-row"><span>Flood Risk:</span> <b id="riskProb">--%</b></div>
+                                    <div class="stat-row"><span>Confidence:</span> <b id="riskConf" style="color:var(--accent)">--%</b></div>
+                                </div>
+                            </div>
+                            <div class="risk-drivers">
+                                <h4><i class="fas fa-microscope"></i> Primary Drivers</h4>
+                                <ul id="driverList">
+                                    <li>Loading model data...</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Evacuation Panel -->
+                        <div class="glass-panel danger-pulse hidden" id="evacPanel">
+                            <h3><i class="fas fa-person-running"></i> Evacuation Protocol</h3>
+                            <p class="evac-warning">CRITICAL ZONE DETECTED</p>
+                            <div class="evac-target" id="evacTarget">Routing...</div>
+                            <div class="evac-actions">
+                                <a id="directionsBtn" href="#" target="_blank" class="btn btn-primary"><i class="fas fa-route"></i> Route</a>
+                                <button class="btn btn-secondary" onclick="sendMockAlert()"><i class="fas fa-envelope"></i> Send Alert</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Right Overlay Controls (Ventusky Style) -->
+                    <div class="map-overlay-right">
+                        <div class="glass-panel layers-menu">
+                            <h3><i class="fas fa-layer-group"></i> Overlays</h3>
+                            <button class="layer-btn active" data-layer="satellite" onclick="setBaseLayer('satellite', this)">Satellite</button>
+                            <button class="layer-btn" data-layer="dark" onclick="setBaseLayer('dark', this)">Dark Map</button>
+                            
+                            <hr style="border-color: rgba(255,255,255,0.1); margin: 10px 0;">
+                            
+                            <label class="toggle-row">
+                                <span><i class="fas fa-cloud-rain" style="color:#3b82f6"></i> Precipitation</span>
+                                <input type="checkbox" onchange="toggleOverlay('precipitation_new', this.checked)">
+                            </label>
+                            <label class="toggle-row">
+                                <span><i class="fas fa-wind" style="color:#a855f7"></i> Wind Flow</span>
+                                <input type="checkbox" onchange="toggleOverlay('wind_new', this.checked)">
+                            </label>
+                            <label class="toggle-row">
+                                <span><i class="fas fa-temperature-half" style="color:#ef4444"></i> Temperature</span>
+                                <input type="checkbox" onchange="toggleOverlay('temp_new', this.checked)">
+                            </label>
+                            
+                            <hr style="border-color: rgba(255,255,255,0.1); margin: 10px 0;">
+                            
+                            <button class="layer-btn gps-btn" onclick="requestUserLocation()"><i class="fas fa-location-crosshairs"></i> Auto-Locate Me</button>
+                        </div>
+                    </div>
+                </main>
+
+            </div>
+        </div>
+
+        <!-- Data Intelligence Tab (Mockup for now) -->
+        <div class="tab-content" id="tab-intelligence">
+            <div style="padding: 30px; color: white;">
+                <h2><i class="fas fa-database"></i> National Data Intelligence</h2>
+                <p style="color: #94a3b8; margin-top: 10px;">Live scraping from IRSA, FFD, and PMD sources.</p>
+                
+                <div style="margin-top: 30px; background: rgba(15,23,42,0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 20px;">
+                    <h3>Live River Levels (IRSA Scraper)</h3>
+                    <pre id="irsaRawData" style="margin-top: 15px; font-family: monospace; color: #3b82f6; overflow-x: auto;">Loading...</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Chatbot Widget -->
+    <div class="fab-container hidden" id="chatFabContainer">
+        <div class="chat-widget hidden" id="chatWidget">
+            <div class="chat-header">
+                <div><i class="fas fa-robot"></i> Grok AI Assistant</div>
+                <button onclick="toggleChat()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="chat-body" id="chatMessages">
+                <div class="msg bot">I am connected to the V3 prediction engine. How can I help you navigate this crisis?</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="Ask about weather, safety, or routes..." onkeypress="if(event.key==='Enter') sendChat()">
+            </div>
+        </div>
+        <button class="fab-button" onclick="toggleChat()">
+            <i class="fas fa-comment-dots"></i>
+        </button>
+    </div>
+
+    <!-- Libraries -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
